@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="jp">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+        <style>
+            body{
+                text-align:center;
+                color:white;
+                font-family: 'Futura','Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic';
+
+            }
+            div{
+                padding:50px 0;
+                background: -moz-linear-gradient(65deg, #F13F79, #FFC778); 
+                background: -webkit-linear-gradient(65deg, #F13F79, #FFC778); 
+                background: linear-gradient(25deg, #F13F79, #FFC778); 
+
+            }
+            .title{
+                font-size:50px;
+            }
+            .my-small{
+                font-size:0.5em;
+            }
+
+        </style>
+        <title>React練習</title>
+    </head>
+
+    <body>
+        <div id="root">
+            <!-- ここにReact.jsで生成したUIが描画される -->
+        </div>
+        <!-- React.js
+        - react.js　→React.jsの本体
+        - react-dom.js →　React.js をDOMで動かすためのJS
+        -ブラウザでJSXをJavascriptに変換するツール
+        -->
+        <!-- REACT LIBRARY -->
+        <script src="https://unpkg.com/react@15.5.4/dist/react.js"></script>
+        <!-- REACT DOM LIBRARY -->
+        <script src="https://unpkg.com/react-dom@15.5.4/dist/react-dom.js"></script>
+        <!-- BABEL LIBRARY -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
+    
+        <script type="text/babel">
+        class Clock extends React.Component{
+            constructor(props){
+                super(props);
+                this.state = {date:new Date()};
+            }
+            componentDidMount(){
+                this.timerID = setInterval(
+                    () => this.tick(),1000
+                );
+            }
+            componentWillUnmount(){
+                clearInterval(this.timeID);
+            }
+            tick(){
+                this.setState({
+                    date: new Date()
+                });
+            }
+            render(){
+                return(
+                <div>
+                    <h1 className="title"><i className="fas fa-star fa-fw my-small"></i><i className="fas fa-star fa-fw"></i>2021年までのカウントダウン<i className="fas fa-star fa-fw"></i><i className="fas fa-star fa-fw my-small"></i></h1>
+                    <h2><i className="fas fa-clock fa-fw fa-spin"></i>現在時刻： {this.state.date.toLocaleTimeString()}.</h2>
+                    <CountDown date={this.state.date} />
+                </div>
+                );
+            }
+        }
+        function CountDown(props){
+            let now = props.date;
+            // 来年の1月1日
+            let firstDay = new Date(now.getFullYear() + 1, 0, 1);
+            // 秒数差
+            let diff = (firstDay.getTime() - now.getTime()) / 1000;
+            // 日時の計算と端数切り捨て
+            let daysLeft = Math.floor(diff / (24 * 60 * 60));
+            let hoursLeft = (Math.floor(diff / (60 * 60))) % 24;
+            let minitesLeft = (Math.floor(diff / 60)) % 60;
+            let secondsLeft = Math.floor(diff) % 60;
+            // 二桁表示
+            minitesLeft = ("0" + minitesLeft).slice(-2);
+            secondsLeft = ("0" + secondsLeft).slice(-2);
+
+            return( 
+            
+            <h2><i className="fas fa-cog fa-fw fa-spin"></i>今年の残り時間は{daysLeft}日{hoursLeft}時間{minitesLeft}分{secondsLeft}秒です.</h2>
+            );
+        }
+        ReactDOM.render(
+            <Clock />,
+            document.getElementById('root')
+        );
+
+        </script>
+    </body>
+</html>
